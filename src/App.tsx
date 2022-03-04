@@ -4,6 +4,10 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import WizSorcSpellContainer from "./component/WizSorcSpellContainer";
 import SpellSearchForm from "./component/SpellSearchForm";
+import {Stack} from "@mui/material";
+import ClassCheckBoxContainer from "./component/ClassCheckBoxContainer";
+import LevelCheckBox from "./component/LevelCheckBox";
+import LevelCheckBoxContainer from "./component/LevelCheckBoxContainer";
 
 function App() {
 
@@ -16,7 +20,11 @@ function App() {
 
     return (
         <div className="App">
-            <SpellSearchForm searchTerm={searchTerm} handleChange={handleChange}/>
+            <Stack>
+                <SpellSearchForm />
+                <ClassCheckBoxContainer />
+                {/*<LevelCheckBoxContainer />*/}
+            </Stack>
             <WizSorcSpellContainer />
         </div>
     );
