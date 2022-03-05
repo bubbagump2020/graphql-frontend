@@ -17,6 +17,7 @@ export const SPELLS = gql`
             description
             rulebook
             classes
+            saving_throw
         }
     }
 `;
