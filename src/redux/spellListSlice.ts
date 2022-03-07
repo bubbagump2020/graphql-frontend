@@ -1,28 +1,24 @@
 import { createSlice, Draft, PayloadAction} from "@reduxjs/toolkit";
 import type { RootState } from './store'
+import Spell from "../classes/Spell";
 
 interface SpellListState {
-    allSpells: any[]
-    filteredSpells: any[]
+    allSpells: Spell[]
 }
 
 const initialState:SpellListState = {
     allSpells: [],
-    filteredSpells: []
 }
 
 export const SpellListSlice = createSlice({
     initialState,
     name: 'spell',
     reducers: {
-        allSpells: (state:Draft<SpellListState>, action:PayloadAction<any>) => {
+        allSpells: (state:Draft<SpellListState>, action:PayloadAction<Array<Spell>>) => {
             state.allSpells = action.payload;
         },
-        filteredSpells: (state:Draft<SpellListState>, action:PayloadAction<any>) => {
-
-        }
     }
 });
 
-export const { allSpells, filteredSpells } = SpellListSlice.actions;
+export const { allSpells, } = SpellListSlice.actions;
 export default SpellListSlice.reducer;
