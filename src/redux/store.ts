@@ -2,13 +2,20 @@ import { configureStore } from '@reduxjs/toolkit';
 import checkboxReducer from './checkboxSlice'
 import searchFormReducer from './searchFormSlice'
 import spellListReducer from './spellListSlice';
+import { getDefaultMiddleware } from "@reduxjs/toolkit";
+
+const customizedMiddleWare = getDefaultMiddleware({
+    serializableCheck: false
+})
+
 
 export const store = configureStore({
     reducer: {
         checkbox: checkboxReducer,
         search: searchFormReducer,
         spells: spellListReducer
-    }
+    },
+    middleware: customizedMiddleWare
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {ReactNode, useEffect} from 'react';
 import { SPELLS } from "../apollo/queries";
 import { useQuery} from "@apollo/client";
-import TableContainer  from '@mui/material/TableContainer';
-import { Table, TableBody, TableCell, TableHead, TableRow,  } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { allSpells } from "../redux/spellListSlice";
-import CustomTableRow from "./CustomTableRow";
+import Spell from "../classes/Spell";
+import SpellPaper from "./SpellPaper";
 
 const SpellContainer:React.FC = () => {
 
@@ -13,16 +13,19 @@ const SpellContainer:React.FC = () => {
     const sClass = useAppSelector(state => state.checkbox.classNames);
     const sLevel = useAppSelector(state => state.checkbox.casterLevels);
     const sTerm = useAppSelector(state => state.search.name);
-    const spellList = useAppSelector(state => state.spells.allSpells);
+    let spells:Spell[] = useAppSelector(state => state.spells.allSpells);
     const dispatch = useAppDispatch();
 
     // GraphQL
     const { loading, error, data } = useQuery(SPELLS);
+    if(data !== undefined) spells = Spell.createArrayOfSpells(data.spells);
+    useEffect(() => {
+        dispatch(allSpells(spells));
+    }, [])
     if(loading) return <p>Loading</p>; // Loading Component
     if(error) return <p>Error :(</p>; // Error Component
-    if(data !== undefined) dispatch(allSpells(data.spells));
 
-    const filterSpells = (spellList:any[], sClass:any[], sTerm:string) => {
+    const filterSpells = (spellList:Spell[], sClass:String[], sTerm:string):ReactNode => {
         /*
         *   Order of Checking
         *   if - no checkboxes checked, no search term entered, what the user would see visiting the page for the first time.
@@ -32,61 +35,63 @@ const SpellContainer:React.FC = () => {
         */
         if(sClass.length === 0 && sTerm.length === 0){
             return spellList.map((spell, index ) => {
-                console.log(spell);
-                return <CustomTableRow
+                return <SpellPaper
                     key={index}
                     name={spell.name}
                     description={spell.description}
                     rulebook={spell.rulebook}
                     resist={spell.resist}
                     school={spell.school}
-                    cast_time={spell.cast_time}
+                    castTime={spell.castTime}
                     components={spell.components}
                     range={spell.range}
-                    target_or_area={spell.target_or_area}
+                    targetOrArea={spell.targetOrArea}
                     duration={spell.duration}
-                    saving_throw={spell.saving_throw}
+                    savingThrow={spell.savingThrow}
                     effect={spell.effect}
+                    classes={spell.classes}
                 />;
             })
         } else if(sClass.length !== 0 && sTerm.length === 0){
             return spellList.map((spell, index) => {
-                const isClassEqual = spell.classes.some((reduxClass:any) => sClass.includes(reduxClass));
+                const isClassEqual = spell.classes.some((reduxClass:String) => sClass.includes(reduxClass));
                 if(isClassEqual){
-                    return <CustomTableRow
+                    return <SpellPaper
                         key={index}
                         name={spell.name}
                         description={spell.description}
                         rulebook={spell.rulebook}
                         resist={spell.resist}
                         school={spell.school}
-                        cast_time={spell.cast_time}
+                        castTime={spell.castTime}
                         components={spell.components}
                         range={spell.range}
-                        target_or_area={spell.target_or_area}
+                        targetOrArea={spell.targetOrArea}
                         duration={spell.duration}
-                        saving_throw={spell.saving_throw}
+                        savingThrow={spell.savingThrow}
                         effect={spell.effect}
+                        classes={spell.classes}
                     />;
                 }
             })
         } else if(sClass.length === 0 && sTerm.length !== 0){
             const st = spellList.filter((spell) => { return spell.name.toLowerCase().includes(sTerm.toLowerCase()); });
             return st.map((spell, index) => {
-                return <CustomTableRow
+                return <SpellPaper
                     key={index}
                     name={spell.name}
                     description={spell.description}
                     rulebook={spell.rulebook}
                     resist={spell.resist}
                     school={spell.school}
-                    cast_time={spell.cast_time}
+                    castTime={spell.castTime}
                     components={spell.components}
                     range={spell.range}
-                    target_or_area={spell.target_or_area}
+                    targetOrArea={spell.targetOrArea}
                     duration={spell.duration}
-                    saving_throw={spell.saving_throw}
+                    savingThrow={spell.savingThrow}
                     effect={spell.effect}
+                    classes={spell.classes}
                 />;
             })
         } else if(sClass.length !== 0 && sTerm.length !== 0){
@@ -107,36 +112,38 @@ const SpellContainer:React.FC = () => {
 
             // Return the HTML
             if(totalFiltered.length === 0){
-                return <CustomTableRow
+                return <SpellPaper
                     name={""}
                     description={"Not Found"}
                     rulebook={""}
                     resist={""}
                     school={""}
-                    cast_time={""}
+                    castTime={""}
                     components={""}
                     range={""}
-                    target_or_area={""}
+                    targetOrArea={""}
                     duration={""}
-                    saving_throw={""}
+                    savingThrow={""}
                     effect={""}
+                    classes={[]}
                 />;
             } else {
                 return totalFiltered.map((spell, index) => {
-                    return <CustomTableRow
+                    return <SpellPaper
                         key={index}
                         name={spell.name}
                         description={spell.description}
                         rulebook={spell.rulebook}
                         resist={spell.resist}
                         school={spell.school}
-                        cast_time={spell.cast_time}
+                        castTime={spell.castTime}
                         components={spell.components}
                         range={spell.range}
-                        target_or_area={spell.target_or_area}
+                        targetOrArea={spell.targetOrArea}
                         duration={spell.duration}
-                        saving_throw={spell.saving_throw}
+                        savingThrow={spell.savingThrow}
                         effect={spell.effect}
+                        classes={spell.classes}
                     />;
                 })
             }
@@ -144,20 +151,23 @@ const SpellContainer:React.FC = () => {
     }
 
     return(
-        <TableContainer>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Spell Name</TableCell>
-                        <TableCell>Spell Description</TableCell>
-                        <TableCell>Rule Book</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    { filterSpells(spellList, sClass, sTerm) }
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Grid container sx={{ justifyContent: 'center'}}>
+            { filterSpells(spells, sClass, sTerm) }
+        </Grid>
+        // <TableContainer>
+        //     <Table>
+        //         <TableHead>
+        //             <TableRow>
+        //                 <TableCell>Spell Name</TableCell>
+        //                 <TableCell>Spell Description</TableCell>
+        //                 <TableCell>Rule Book</TableCell>
+        //             </TableRow>
+        //         </TableHead>
+        //         <TableBody>
+        // {/*            { filterSpells(spells, sClass, sTerm) }*/}
+        // {/*        </TableBody>*/}
+        // {/*    </Table>*/}
+        // {/*</TableContainer>*/}
     );
 }
 
