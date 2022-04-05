@@ -1,6 +1,4 @@
 import React, {ReactNode, useEffect} from 'react';
-import { SPELLS } from "../apollo/queries";
-import { useQuery} from "@apollo/client";
 import { Grid } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { allSpells } from "../redux/spellListSlice";
@@ -12,6 +10,7 @@ import {
     levelFilter, levelSearchTermFilter,
     searchTermFilter
 } from "../functions/dry-filter-functions";
+import axios from 'axios';
 
 const SpellContainer:React.FC = () => {
 
@@ -22,14 +21,15 @@ const SpellContainer:React.FC = () => {
     let spells:Spell[] = useAppSelector(state => state.spells.allSpells);
     const dispatch = useAppDispatch();
 
-    // GraphQL
-    const { loading, error, data } = useQuery(SPELLS);
-    if(data !== undefined) spells = Spell.createArrayOfSpells(data.spells);
     useEffect(() => {
-        dispatch(allSpells(spells));
+        const fetchRailsAPI = async () => {
+            const request = await axios.get('http://pathfindermagicwiki-api.herokuapp.com/spells');
+            spells = Spell.createArrayOfSpells(request.data);
+            dispatch(allSpells(spells));
+        }
+        fetchRailsAPI();
+
     }, [])
-    if(loading) return <p>Loading</p>; // Loading Component
-    if(error) return <p>Error :(</p>; // Error Component
 
     // Filtering
     const filterSpells = (spellList:Spell[], sClass:String[], sTerm:string):ReactNode => {
