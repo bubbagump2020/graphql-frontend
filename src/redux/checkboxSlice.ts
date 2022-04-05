@@ -27,9 +27,16 @@ export const CheckboxSlice = createSlice({
         },
         addLevel: (state:Draft<CheckboxState>, action:PayloadAction<number>) => {
             state.casterLevels.push(action.payload);
+        },
+        removeLevel: (state:Draft<CheckboxState>, action:PayloadAction<number>) => {
+            state.casterLevels.forEach((l, i) => {
+                if(l === action.payload){
+                    state.casterLevels.splice(i, 1);
+                }
+            })
         }
     }
 })
 
-export const { addClass, removeClass, addLevel } = CheckboxSlice.actions;
+export const { addClass, removeClass, addLevel, removeLevel } = CheckboxSlice.actions;
 export default CheckboxSlice.reducer

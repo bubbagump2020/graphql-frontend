@@ -1,8 +1,7 @@
-import React, {BaseSyntheticEvent} from "react";
+import React from "react";
 import {Container, FormGroup} from "@mui/material";
 import classes from "../data/classes";
 import CustomCheckBox from "./CustomCheckBox";
-import {useAppSelector} from "../redux/hooks";
 
 const ClassCheckBoxContainer:React.FC = () => {
     const casterClasses = classes;
