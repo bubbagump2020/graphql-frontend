@@ -1,7 +1,7 @@
-import React, {BaseSyntheticEvent, SyntheticEvent} from 'react';
-import { FormControl, Grid, Input, InputLabel, Link, Paper, TextField, Typography} from "@mui/material";
-import {useAppDispatch} from "../redux/hooks";
-import {searchName} from "../redux/searchFormSlice";
+import React, { BaseSyntheticEvent } from 'react';
+import { FormControl, Grid, Input, InputLabel } from "@mui/material";
+import { useAppDispatch } from "../redux/hooks";
+import { searchName } from "../redux/searchFormSlice";
 
 const SpellSearchForm:React.FC = () => {
 
@@ -25,8 +25,7 @@ const SpellSearchForm:React.FC = () => {
                 </FormControl>
             </Grid>
         </Grid>
-
-    )
+    );
 }
 
 export default SpellSearchForm;

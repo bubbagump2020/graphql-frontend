@@ -1,12 +1,10 @@
-import React, {BaseSyntheticEvent, SyntheticEvent, useState} from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SpellContainer from "./component/SpellContainer";
 import SpellSearchForm from "./component/SpellSearchForm";
 import {Stack} from "@mui/material";
 import ClassCheckBoxContainer from "./component/ClassCheckBoxContainer";
-import LevelCheckBox from "./component/LevelCheckBox";
 import LevelCheckBoxContainer from "./component/LevelCheckBoxContainer";
 
 function App() {
@@ -15,7 +13,7 @@ function App() {
             <Stack>
                 <SpellSearchForm />
                 <ClassCheckBoxContainer />
-                {/*<LevelCheckBoxContainer />*/}
+                <LevelCheckBoxContainer />
             </Stack>
             <SpellContainer />
         </div>
