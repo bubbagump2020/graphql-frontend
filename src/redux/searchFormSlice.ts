@@ -6,7 +6,7 @@ interface SearchFormState {
 }
 
 const initialState:SearchFormState = {
-    name: ""
+    name: "",
 }
 
 export const SearchFormSlice = createSlice({

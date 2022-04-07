@@ -2,18 +2,16 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SpellContainer from "./component/SpellContainer";
-import SpellSearchForm from "./component/SpellSearchForm";
+import SpellSearchForm from "./component/forms/SpellSearchForm";
+import RadioButtonContainer from './component/forms/RadioButtonContainer';
 import {Stack} from "@mui/material";
-import ClassCheckBoxContainer from "./component/ClassCheckBoxContainer";
-import LevelCheckBoxContainer from "./component/LevelCheckBoxContainer";
 
 function App() {
     return (
         <div className="App">
             <Stack>
                 <SpellSearchForm />
-                <ClassCheckBoxContainer />
-                <LevelCheckBoxContainer />
+                <RadioButtonContainer />
             </Stack>
             <SpellContainer />
         </div>
