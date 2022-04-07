@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import checkboxReducer from './checkboxSlice'
+import radioButtonReducer from './radioButtonSlice'
 import searchFormReducer from './searchFormSlice'
 import spellListReducer from './spellListSlice';
 import { getDefaultMiddleware } from "@reduxjs/toolkit";
@@ -11,7 +11,7 @@ const customizedMiddleWare = getDefaultMiddleware({
 
 export const store = configureStore({
     reducer: {
-        checkbox: checkboxReducer,
+        radioButton: radioButtonReducer,
         search: searchFormReducer,
         spells: spellListReducer
     },

@@ -1,7 +1,7 @@
 import React, { BaseSyntheticEvent } from 'react';
 import { FormControl, Grid, Input, InputLabel } from "@mui/material";
-import { useAppDispatch } from "../redux/hooks";
-import { searchName } from "../redux/searchFormSlice";
+import { useAppDispatch } from "../../redux/hooks";
+import { searchName } from "../../redux/searchFormSlice";
 
 const SpellSearchForm:React.FC = () => {
 
@@ -11,7 +11,6 @@ const SpellSearchForm:React.FC = () => {
         e.preventDefault();
         dispatch(searchName(e.currentTarget.value));
     }
-
 
     return(
         <Grid container spacing={2}>

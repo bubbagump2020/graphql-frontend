@@ -4,20 +4,16 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { allSpells } from "../redux/spellListSlice";
 import Spell from "../classes/Spell";
 import SpellPaper from "./SpellPaper";
-import {
-    classFilter, classLevelFilter,
-    classSearchTermFilter, classSearchTermLevelFilter,
-    levelFilter, levelSearchTermFilter,
-    searchTermFilter
-} from "../functions/dry-filter-functions";
 import axios from 'axios';
 
 const SpellContainer:React.FC = () => {
 
     // Redux
-    const sClass = useAppSelector(state => state.checkbox.classNames);
-    const sLevel = useAppSelector(state => state.checkbox.casterLevels);
-    const sTerm = useAppSelector(state => state.search.name);
+    // cnl = Class Name & Level
+    // term - Search Term
+    
+    const cnl = useAppSelector(state => state.radioButton.cnl);
+    const term = useAppSelector(state => state.search.name);
     let spells:Spell[] = useAppSelector(state => state.spells.allSpells);
     const dispatch = useAppDispatch();
 
@@ -32,70 +28,39 @@ const SpellContainer:React.FC = () => {
     }, [])
 
     // Filtering
-    const filterSpells = (spellList:Spell[], sClass:String[], sTerm:string):ReactNode => {
-        // Natural state, no search term or any of the check-boxes checked.
-        if(sClass.length === 0 && sTerm.length === 0 && sLevel.length === 0){
-            return spellList.map((spell, index ) => {
-                return <SpellPaper key={index} spell={spell} />;
-            });
-        // A class checkbox is checked, there is no search term, and no level checkbox is checked.
-        } else if(sClass.length !== 0 && sTerm.length === 0 && sLevel.length === 0){
-            return spellList.map((spell, index) => {
-                const isClassEqual = classFilter(spell, sClass);
-                if(isClassEqual.includes(true)){
-                    return <SpellPaper key={index} spell={spell} />;
-                }
-            });
-        // No class checkbox checked, there is a search term, and no level checkbox is checked
-        } else if(sClass.length === 0 && sTerm.length !== 0 && sLevel.length === 0){
-            const st = searchTermFilter(spellList, sTerm);
-            return st.map((spell, index) => {
-                return <SpellPaper key={index} spell={spell} />;
-            });
-            // No class checkbox checked, there is not a search term, and level checkbox(s) are checked.
-        } else if(sClass.length === 0 && sTerm.length === 0 && sLevel.length !== 0){
-            return spellList.map((spell, index) => {
-                const isLevelEqual = levelFilter(spell, sLevel);
-                if(isLevelEqual.includes(true)){
-                    return <SpellPaper key={index} spell={spell} />;
-                }
-            });
-            // There's a search term, a class checkbox has been checked and no level checkbox is checked
-        } else if(sClass.length !== 0 && sTerm.length !== 0 && sLevel.length === 0){
-            const totalFiltered = classSearchTermFilter(spellList, sClass, sTerm);
-            if(totalFiltered.length === 0){
-                const spell = new Spell('','','','','','','','','','','','',[]);
-                return <SpellPaper spell={spell}/>;
-            } else {
-                return totalFiltered.map((spell, index) => {
-                    return <SpellPaper key={index} spell={spell} />;
-                });
-            }
-            // checkboxes checked and there is a searchterm
-        } else if (sClass.length !== 0 && sTerm.length !== 0 && sLevel.length !== 0){
-            const spells = classSearchTermLevelFilter(spellList, sClass, sTerm, sLevel)
-            return spells.map((spell, index) => {
-                return <SpellPaper key={index} spell={spell} />;
-            });
-            // both class and level checkboxes checked
-        } else if(sClass.length !==0 && sTerm.length === 0 && sLevel.length !== 0 ) {
-            const spells = classLevelFilter(spellList, sClass, sLevel);
-            return spells.map((spell, index) => {
-                return <SpellPaper key={index} spell={spell} />;
-            });
-            // level checkbox and search term
-        } else if(sClass.length === 0 && sTerm.length !== 0 && sLevel.length !== 0){
-            const spells = levelSearchTermFilter(spellList, sTerm, sLevel);
-            return spells.map((spell, index) => {
-                return <SpellPaper key={index} spell={spell} />;
-            });
+    const filterSpells = (spellList:Spell[], cnl:string, term:string ):ReactNode => {
+
+        // fbcal = Filtered By Class And Level
+        // fbt = Filtered By Term
+        // fba = Filtered By All
+        const fbcal:Spell[] = spellList.filter(spell => spell.classes.includes(cnl));
+        const fbt:Spell[] = spellList.filter(spell => spell.name.toLowerCase().includes(term.toLowerCase()));
+        const fba:Spell[] = fbcal.filter(spell => spell.name.toLowerCase().includes(term.toLowerCase()));
+
+        if(fba.length !== 0){
+            return fba.map((s, i) => {
+                return <SpellPaper key={i} spell={s} />
+            })
+        } else if(fbcal.length !==0 && fbt.length === 0){
+            return fbcal.map((s, i) => {
+                return <SpellPaper key={i} spell={s} />
+            })
+        } else if(fbcal.length === 0 && fbt.length !== 0){
+            return fbt.map((s, i) => {
+                return <SpellPaper key={i} spell={s} />
+            })
+        } else {
+            return spellList.map((s, i) => {
+                return <SpellPaper key={i} spell={s} />
+            })
         }
+
     }
 
     // HTML
     return(
         <Grid container sx={{ justifyContent: 'center'}}>
-            { filterSpells(spells, sClass, sTerm) }
+            { filterSpells(spells, cnl, term) }
         </Grid>
     );
 }

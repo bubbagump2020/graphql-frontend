@@ -42,7 +42,7 @@ const SpellPaper:React.FC<ISpellPaper> = ({spell}:ISpellPaper) => {
         savingThrow,
         targetOrArea,
         resist,
-        classObj,
+        classes,
         duration
     } = spell;
 
@@ -82,7 +82,7 @@ const SpellPaper:React.FC<ISpellPaper> = ({spell}:ISpellPaper) => {
                     <Paper className={"modal-paper"} elevation={6}>
                         <Typography variant={"h5"}>{name}</Typography>
                         <Grid container sx={{justifyContent: 'space-evenly', marginTop: '5px'}}>
-                            {showCasterClass(classObj)}
+                            {/* {showCasterClass(classObj)} */}
                         </Grid>
                         <div className={"border-break"}></div>
                         <Grid container sx={{ justifyContent: "space-between"}}>

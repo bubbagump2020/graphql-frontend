@@ -13,7 +13,7 @@ class Spell {
     resist:string
     description:string
     rulebook:string
-    classObj: Array<CasterClass> = []
+    classes: String[]
 
 
     constructor(
@@ -29,7 +29,8 @@ class Spell {
         resist: string,
         description: string,
         rulebook: string,
-        classes: Array<string>
+        classes: Array<string>,
+
     ) {
         this.name = name;
         this.school = school;
@@ -43,7 +44,7 @@ class Spell {
         this.resist = resist;
         this.description = description;
         this.rulebook = rulebook;
-        this.classObj = Spell.createArrayOfCasterClassObjects(classes);
+        this.classes = classes;
     }
 
     static create(spell:any):Spell {
