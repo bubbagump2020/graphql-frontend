@@ -1,5 +1,3 @@
-import CasterClass from "./CasterClass";
-
 class Spell {
     name:string
     school:string
@@ -61,24 +59,15 @@ class Spell {
             spell.resist,
             spell.description,
             spell.rulebook,
-            spell.classes);
+            spell.classes
+        );
     }
 
     static createArrayOfSpells(spells:any[]):Array<Spell>{
         let spellsArr:Array<Spell> = [];
-        spells.map((spell) => {
-            spellsArr.push(Spell.create(spell))
-        })
-        return spellsArr
+        spells.map((spell) => spellsArr.push(Spell.create(spell)))
+        return spellsArr;
     }
-
-    static createArrayOfCasterClassObjects(strArr:Array<string>):Array<CasterClass>{
-        let classes:Array<CasterClass> = [];
-        strArr.map(caster => classes.push(CasterClass.createCasterClass(caster.split(' ')[0], parseInt(caster.split(' ')[1]))));
-        return classes;
-    }
-
-
 }
 
 export default Spell;

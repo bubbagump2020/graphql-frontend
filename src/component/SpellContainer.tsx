@@ -59,7 +59,7 @@ const SpellContainer:React.FC = () => {
 
     // HTML
     return(
-        <Grid container sx={{ justifyContent: 'center'}}>
+        <Grid container sx={{ justifyContent: 'center', padding: '100px'}}>
             { filterSpells(spells, cnl, term) }
         </Grid>
     );
