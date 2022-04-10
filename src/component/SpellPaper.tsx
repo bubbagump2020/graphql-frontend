@@ -1,8 +1,16 @@
 import React from "react";
 import Spell from "../classes/Spell";
-import {Container, Grid, Modal, Paper, Stack, Typography} from "@mui/material";
+import { Card, CardActionArea, CardMedia, Container, Grid, Modal, Paper, Stack, Typography } from "@mui/material";
 import '../style/Scrollbar.sass';
-import CasterClass from "../classes/CasterClass";
+
+import abjuration from '../style/art/abjuration.jpg';
+import conjuration from '../style/art/conjuration.jpg';
+import divination from '../style/art/divination.jpg';
+import enchantment from '../style/art/enchantment.jpg';
+import evocation from '../style/art/evocation.jpg';
+import illusion from '../style/art/illusion.jpg';
+import necromancy from '../style/art/necromancy.jpg';
+import transmutation from '../style/art/transmutation.jpg';
 
 const modalStyle = {
     position: 'absolute',
@@ -21,11 +29,6 @@ interface ISpellPaper {
 }
 
 const SpellPaper:React.FC<ISpellPaper> = ({spell}:ISpellPaper) => {
-
-    // Paper behavior on mouse hover
-    const [elevation, setElevation] = React.useState(3);
-    const handleMouseEnter = () => setElevation(12);
-    const handleMouseLeave = () => setElevation(3)
 
     // Modal boolean
     const [open, setOpen] = React.useState(false);
@@ -48,30 +51,53 @@ const SpellPaper:React.FC<ISpellPaper> = ({spell}:ISpellPaper) => {
 
     const handleClick = (e:any) => {
         e.preventDefault();
+        console.log("i'm being clicked!")
         setOpen(!open)
     };
 
-    const showCasterClass = (castArr:Array<CasterClass>) => {
+    // function to handle the choosing of the spell art
+    const schoolImg = (school:string):string => {
+        const splitSchool = school.split(' ');
+        switch(splitSchool[0].toLowerCase()){
+            case 'abjuration':
+                return abjuration;
+            case 'conjuration':
+                return conjuration;
+            case 'divination':
+                return divination;
+            case 'enchantment':
+                return enchantment;
+            case 'evocation':
+                return evocation;
+            case 'illusion':
+                return illusion;
+            case 'necromancy':
+                return necromancy;
+            default:
+                return transmutation;
+        }
+    }
+
+    // function to show the spells assigned classes.
+    const showCasterClass = (castArr:String[]) => {
         return castArr.map((caster, index) => {
-            const { name, level } = caster;
             return(
                 <div key={index}>
-                    <p>{name} {level}</p>
+                    <p>{caster}</p>
                 </div>
             )
         });
     }
 
-
+    // The HTML of the card
     return(
-        <Paper className={"paper-card"} elevation={elevation} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={handleClick}>
-            <Grid className={"paper-card-grid"} container >
-                <Typography className={"spell-name"} variant={'h5'}>{name}</Typography>
-            </Grid>
-            <div className={"border-break"}/>
-            <Container className={"desc-container"} >
-                <Typography className={"description"}>{description}</Typography>
-            </Container>
+        <Card className='spellcard'>
+            <CardActionArea onClick={handleClick}>
+                <CardMedia component='img' height='127' width='130' image={schoolImg(school)} />
+                <Typography className='card-name' variant='h6' gutterBottom component='div' sx={{height: '60px'}}>
+                {name}
+            </Typography>
+            </CardActionArea>
             <Modal
                 open={open}
                 onClose={handleClick}
@@ -82,7 +108,7 @@ const SpellPaper:React.FC<ISpellPaper> = ({spell}:ISpellPaper) => {
                     <Paper className={"modal-paper"} elevation={6}>
                         <Typography variant={"h5"}>{name}</Typography>
                         <Grid container sx={{justifyContent: 'space-evenly', marginTop: '5px'}}>
-                            {/* {showCasterClass(classObj)} */}
+                            {showCasterClass(classes)}
                         </Grid>
                         <div className={"border-break"}></div>
                         <Grid container sx={{ justifyContent: "space-between"}}>
@@ -123,7 +149,9 @@ const SpellPaper:React.FC<ISpellPaper> = ({spell}:ISpellPaper) => {
                     </Paper>
                 </Stack>
             </Modal>
-        </Paper>
+        </Card>
+        
+            
     )
 }
 
